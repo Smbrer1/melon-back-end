@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "melon-back-end"
+version = "0.1.0"
+description = ""
+authors = ["Соколов Артём Викторович <tumakaelfufaka@gmail.com>"]
+readme = "readme.md"
+packages = [{include = "melon_back_end"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ruff = "^0.0.253"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
