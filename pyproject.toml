@@ -2,12 +2,15 @@
 name = "melon-back-end"
 version = "0.1.0"
 description = ""
-authors = ["Соколов Артём Викторович <tumakaelfufaka@gmail.com>"]
+authors = [
+    "Соколов Артём Викторович <tumakaelfufaka@gmail.com>",
+    "Собин Григорий Олегович <>"
+]
 readme = "readme.md"
 packages = [{include = "melon_back_end"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 ruff = "^0.0.253"
 fastapi = "^0.92.0"
 websocket = "^0.2.1"
