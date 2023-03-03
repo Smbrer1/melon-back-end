@@ -8,3 +8,9 @@
 3) Прописать в терминале: (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
 4) Установить Path с помощью: $Env:Path += ";C:\Users\jetbrains\AppData\Roaming\Python\Scripts"; setx PATH "$Env:Path"
 5) Установить зависимости с помощью: poetry install
+
+## Работа
+
+---
+
+Для работы нужно отвести свою ветку от preprod
