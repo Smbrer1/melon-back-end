@@ -1,18 +1,21 @@
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 from uuid import UUID, uuid4
+
 from beanie import Document, Indexed
 from pydantic import Field, EmailStr
 
+from back_end.utils import get_new_uuid
+
 
 class User(Document):
-    user_id: UUID = Field(default_factory=uuid4)
+    user_id: UUID = Field(default_factory=uuid4, alias="userId")
     username: Indexed(str, unique=True)
     email: Indexed(EmailStr, unique=True)
-    hashed_password: str
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    disabled: Optional[bool] = None
+    hashed_password: str = Field(alias="hashedPassword")
+    first_name: Optional[str] = Field(alias="firstName")
+    last_name: Optional[str] = Field(alias="lastName")
+    disabled: Optional[bool] = False
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
