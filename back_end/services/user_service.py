@@ -45,6 +45,8 @@ class UserService:
         user = await User.find_one(User.user_id == uuid)
         if not user:
             raise pymongo.errors.OperationFailure("User not found")
-
-        await user.update({"$set": data.dict(exclude_unset=True)})
+        user.email = data.email
+        user.first_name = data.first_name
+        user.last_name = data.last_name
+        await user.save()
         return user
