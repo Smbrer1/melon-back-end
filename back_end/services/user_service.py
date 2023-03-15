@@ -1,10 +1,11 @@
 from typing import Optional
 from uuid import UUID
-from back_end.schemas.user_schema import UserAuth
-from back_end.models.user_model import User
-from back_end.core.security import get_password, verify_password
-import pymongo
 
+import pymongo.errors
+
+from back_end.core.security import get_password, verify_password
+from back_end.models.user_model import User
+from back_end.schemas.user_schema import UserAuth
 from back_end.schemas.user_schema import UserUpdate
 
 
@@ -35,15 +36,17 @@ class UserService:
         return user
 
     @staticmethod
-    async def get_user_by_id(id: UUID) -> Optional[User]:
-        user = await User.find_one(User.user_id == id)
+    async def get_user_by_id(uuid: UUID) -> Optional[User]:
+        user = await User.find_one(User.user_id == uuid)
         return user
 
     @staticmethod
-    async def update_user(id: UUID, data: UserUpdate) -> User:
-        user = await User.find_one(User.user_id == id)
+    async def update_user(uuid: UUID, data: UserUpdate) -> User:
+        user = await User.find_one(User.user_id == uuid)
         if not user:
             raise pymongo.errors.OperationFailure("User not found")
-
-        await user.update({"$set": data.dict(exclude_unset=True)})
+        user.email = data.email
+        user.first_name = data.first_name
+        user.last_name = data.last_name
+        await user.save()
         return user

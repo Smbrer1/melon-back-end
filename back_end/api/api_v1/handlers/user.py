@@ -1,10 +1,11 @@
+import pymongo.errors
 from fastapi import APIRouter, HTTPException, status
-from back_end.schemas.user_schema import UserAuth, UserOut, UserUpdate
 from fastapi import Depends
-from back_end.services.user_service import UserService
-import pymongo
-from back_end.models.user_model import User
+
 from back_end.api.deps.user_deps import get_current_user
+from back_end.models.user_model import User
+from back_end.schemas.user_schema import UserAuth, UserOut, UserUpdate
+from back_end.services.user_service import UserService
 
 user_router = APIRouter()
 

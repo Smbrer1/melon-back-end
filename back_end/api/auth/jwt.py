@@ -1,16 +1,18 @@
+from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException, status, Body
 from fastapi.security import OAuth2PasswordRequestForm
-from typing import Any
-from back_end.services.user_service import UserService
-from back_end.core.security import create_access_token, create_refresh_token
-from back_end.schemas.auth_schema import TokenSchema
-from back_end.schemas.user_schema import UserOut
-from back_end.models.user_model import User
+from jose import jwt
+from pydantic import ValidationError
+
 from back_end.api.deps.user_deps import get_current_user
 from back_end.core.config import settings
+from back_end.core.security import create_access_token, create_refresh_token
+from back_end.models.user_model import User
 from back_end.schemas.auth_schema import TokenPayload
-from pydantic import ValidationError
-from jose import jwt
+from back_end.schemas.auth_schema import TokenSchema
+from back_end.schemas.user_schema import UserOut
+from back_end.services.user_service import UserService
 
 auth_router = APIRouter()
 
@@ -44,7 +46,7 @@ async def test_token(user: User = Depends(get_current_user)):
 
 
 @auth_router.post("/refresh", summary="Refresh token", response_model=TokenSchema)
-async def refresh_token(refresh_token: str = Body(...)):
+async def refresh_jwt_token(refresh_token: str = Body(...)):
     try:
         payload = jwt.decode(
             refresh_token,

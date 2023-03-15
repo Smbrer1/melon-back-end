@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
-from passlib.context import CryptContext
 from typing import Union, Any
-from back_end.core.config import settings
+
 from jose import jwt
+from passlib.context import CryptContext
+
+from back_end.core.config import settings
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
