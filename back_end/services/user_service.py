@@ -37,12 +37,12 @@ class UserService:
 
     @staticmethod
     async def get_user_by_id(uuid: UUID) -> Optional[User]:
-        user = await User.find_one(User.id == uuid)
+        user = await User.find_one(User.user_id == uuid)
         return user
 
     @staticmethod
     async def update_user(uuid: UUID, data: UserUpdate) -> User:
-        user = await User.find_one(User.id == uuid)
+        user = await User.find_one(User.user_id == uuid)
         if not user:
             raise pymongo.errors.OperationFailure("User not found")
 

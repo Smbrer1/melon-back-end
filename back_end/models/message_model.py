@@ -5,6 +5,8 @@ from uuid import UUID, uuid4
 from beanie import Document, Indexed
 from pydantic import Field
 
+from back_end.utils import get_new_uuid
+
 
 class Message(Document):
     msg_id: UUID = Field(default_factory=uuid4, alias="msgId")

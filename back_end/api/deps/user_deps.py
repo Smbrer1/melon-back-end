@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 
 from fastapi import Depends, HTTPException, status
@@ -28,15 +29,16 @@ async def get_current_user(token: str = Depends(reusable_oauth)) -> User:
                 detail="Token expired",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-    except (jwt.JWTError, ValidationError):
+    except (jwt.JWTError, ValidationError) as e:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials",
+            detail={"msg": "Could not validate credentials:",
+                    "error": e.json(),
+                    "token": token},
             headers={"WWW-Authenticate": "Bearer"},
         )
 
     user = await UserService.get_user_by_id(token_data.sub)
-
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

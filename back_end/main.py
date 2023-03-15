@@ -10,7 +10,8 @@ from back_end.models.message_model import Message
 from back_end.models.user_model import User
 
 app = FastAPI(
-    title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    debug=True
 )
 
 app.add_middleware(
