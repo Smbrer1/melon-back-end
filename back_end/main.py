@@ -5,6 +5,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from back_end.api.api_v1.router import router
 from back_end.core.config import settings
+from back_end.models.chat_model import ChatRoom
+from back_end.models.message_model import Message
 from back_end.models.user_model import User
 
 app = FastAPI(
@@ -30,9 +32,7 @@ async def app_init():
 
     await init_beanie(
         database=db_client,
-        document_models=[
-            User,
-        ],
+        document_models=[User, Message, ChatRoom],
     )
 
 

@@ -13,11 +13,11 @@ class UserAuth(BaseModel):
 
 
 class UserOut(BaseModel):
-    user_id: UUID
+    user_id: UUID = Field(alias="userId")
     username: str
     email: EmailStr
-    first_name: Optional[str]
-    last_name: Optional[str]
+    first_name: Optional[str] = Field(alias="firstName")
+    last_name: Optional[str] = Field(alias="lastName")
     disabled: Optional[bool] = False
 
 

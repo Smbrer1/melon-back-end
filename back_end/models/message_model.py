@@ -7,7 +7,7 @@ from pydantic import Field
 
 
 class Message(Document):
-    id: UUID = Field(default_factory=uuid4, alias="messageId")
+    msg_id: UUID = Field(default_factory=uuid4, alias="msgId")
     chat_id: Indexed(UUID) = Field(alias="chatId")
     text: str
     user_id: UUID = Field(alias="userId")
