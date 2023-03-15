@@ -50,3 +50,5 @@ class UserService:
         user.last_name = data.last_name
         await user.save()
         return user
+
+    # TODO find by username

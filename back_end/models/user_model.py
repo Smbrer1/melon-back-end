@@ -5,8 +5,6 @@ from uuid import UUID, uuid4
 from beanie import Document, Indexed
 from pydantic import Field, EmailStr
 
-from back_end.utils import get_new_uuid
-
 
 class User(Document):
     user_id: UUID = Field(default_factory=uuid4, alias="userId")
@@ -30,14 +28,6 @@ class User(Document):
         if isinstance(other, User):
             return self.email == other.email
         return False
-
-    @property
-    def create(self) -> datetime:
-        return self.id.generation_time
-
-    @classmethod
-    async def by_email(cls, email: str) -> "User":
-        return await cls.find_one(cls.email == email)
 
     class Settings:
         name = "users"

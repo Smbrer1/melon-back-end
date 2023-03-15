@@ -38,16 +38,16 @@ class MessageService:
         return edited_msg
 
     @staticmethod
-    async def delete_message(msg: MessageDelete, user: User) -> Optional[GenericDelete]:
+    async def delete_message(msg_id: UUID, user: User) -> Optional[GenericDelete]:
         deleted_msg = await Message.find_one(
-            Message.msg_id == msg.msg_id, Message.user_id == user.user_id
+            Message.msg_id == msg_id, Message.user_id == user.user_id
         )
         if not deleted_msg:
             raise pymongo.errors.OperationFailure("Message not found")
         if await deleted_msg.delete():
-            return GenericDelete(item={"messageId": msg.msg_id}, success=True)
+            return GenericDelete(item={"messageId": msg_id}, success=True)
         else:
-            return GenericDelete(item={"messageId": msg.msg_id}, success=False)
+            return GenericDelete(item={"messageId": msg_id}, success=False)
 
 
     @staticmethod
