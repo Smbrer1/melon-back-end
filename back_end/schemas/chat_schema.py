@@ -1,8 +1,6 @@
-from datetime import datetime
-from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class CreateChat(BaseModel):
@@ -13,3 +11,8 @@ class CreateChat(BaseModel):
 class CreateDM(BaseModel):
     name: str
     user_id: UUID
+
+
+class ChatInvitation(BaseModel):
+    chat_id: UUID
+    participants: set[UUID]

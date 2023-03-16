@@ -1,15 +1,13 @@
 from datetime import datetime
-from http.client import HTTPResponse
 from typing import Optional
 from uuid import UUID
 
 import pymongo.errors
-from pymongo.results import DeleteResult
 
 from back_end.models.message_model import Message
 from back_end.models.user_model import User
 from back_end.schemas.generic_response_schema import GenericDelete
-from back_end.schemas.message_schema import SentMessage, MessageDelete, DeletedMessage
+from back_end.schemas.message_schema import SentMessage
 
 
 class MessageService:
@@ -48,7 +46,6 @@ class MessageService:
             return GenericDelete(item={"messageId": msg_id}, success=True)
         else:
             return GenericDelete(item={"messageId": msg_id}, success=False)
-
 
     @staticmethod
     async def get_message_by_id(msg_id: UUID, user: User) -> Optional[Message]:
