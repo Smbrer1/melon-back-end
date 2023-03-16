@@ -41,9 +41,7 @@ class ChatService:
             return GenericDelete(item={"chatId": delete_chat}, success=False)
 
     @staticmethod
-    async def remove_from_chat(
-        chat_id: UUID, participants: set[UUID], user: User
-    ) -> Optional[GenericDelete]:
+    async def remove_from_chat(chat_id: UUID, participants: set[UUID], user: User) -> Optional[GenericDelete]:
         remove_chat = await Chat.find_one(
             Chat.chat_id == chat_id, Chat.creator_id == user.user_id
         )
@@ -83,8 +81,8 @@ class ChatService:
         return chats
 
     @staticmethod
-    async def invite_to_chat(chat_inv: ChatInvitation) -> Optional[Chat]:
-        chat = await Chat.find_one(Chat.chat_id == chat_inv.chat_id)
+    async def invite_to_chat(chat_inv: ChatInvitation, user: User) -> Optional[Chat]:
+        chat = await Chat.find_one(Chat.chat_id == chat_inv.chat_id, user.user_id in Chat.participants)
         if not chat:
             raise pymongo.errors.OperationFailure("User is not in chats")
 
