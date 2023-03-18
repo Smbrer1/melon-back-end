@@ -2,6 +2,7 @@ from typing import Optional
 from uuid import UUID
 
 import pymongo.errors
+from beanie.odm.queries.find import FindMany
 
 from back_end.core.security import get_password, verify_password
 from back_end.models.user_model import User
@@ -11,7 +12,15 @@ from back_end.schemas.user_schema import UserUpdate
 
 class UserService:
     @staticmethod
-    async def create_user(user: UserAuth):
+    async def create_user(user: UserAuth) -> Optional[User]:
+        """ Создать юзера в бд
+
+        Args:
+            user: Модель авторизации юзера
+
+        Returns: Модель юзера
+
+        """
         user_in = User(
             username=user.username,
             email=user.email,
@@ -22,6 +31,15 @@ class UserService:
 
     @staticmethod
     async def authenticate(email: str, password: str) -> Optional[User]:
+        """ Аутентификация юзера
+
+        Args:
+            email: Почта пользователя
+            password: Пароль пользователя
+
+        Returns: Модель юзера
+
+        """
         user = await UserService.get_user_by_email(email=email)
         if not user:
             return None
@@ -32,16 +50,41 @@ class UserService:
 
     @staticmethod
     async def get_user_by_email(email: str) -> Optional[User]:
+        """ Получить юзера по почте
+
+        Args:
+            email: почта
+
+        Returns: Модель юзера
+
+        """
         user = await User.find_one(User.email == email)
         return user
 
     @staticmethod
     async def get_user_by_id(uuid: UUID) -> Optional[User]:
+        """ Получить юзера по ID
+
+        Args:
+            uuid: UUID юзера
+
+        Returns: Модель юзера
+
+        """
         user = await User.find_one(User.user_id == uuid)
         return user
 
     @staticmethod
     async def update_user(uuid: UUID, data: UserUpdate) -> User:
+        """ Редактировать юзера
+
+        Args:
+            uuid: UUID юзера
+            data: Схема редактирования юзера
+
+        Returns: Модель юзера
+
+        """
         user = await User.find_one(User.user_id == uuid)
         if not user:
             raise pymongo.errors.OperationFailure("User not found")
@@ -51,4 +94,6 @@ class UserService:
         await user.save()
         return user
 
-    # TODO find by username
+    @staticmethod
+    async def find_like_username(username: str) -> Optional[FindMany[User]]:
+        return User.find_many({"username": f"/^{username}/"})
