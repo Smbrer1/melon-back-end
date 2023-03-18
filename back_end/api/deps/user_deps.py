@@ -17,6 +17,14 @@ reusable_oauth = OAuth2PasswordBearer(
 
 
 async def get_current_user(token: str = Depends(reusable_oauth)) -> User:
+    """ Функция для инъекции зависимости JWT токена
+
+    Args:
+        token: JWT токен
+
+    Returns: Модель юзера
+
+    """
     try:
         payload = jwt.decode(
             token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]

@@ -23,6 +23,14 @@ auth_router = APIRouter()
     response_model=TokenSchema,
 )
 async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
+    """ Пост для логина юзера
+
+    Args:
+        form_data: DI для OAUTH2
+
+    Returns: Словарь с JWT токенами
+
+    """
     user = await UserService.authenticate(
         email=form_data.username, password=form_data.password
     )
@@ -42,11 +50,27 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
     "/test-token", summary="Test if the access token is valid", response_model=UserOut
 )
 async def test_token(user: User = Depends(get_current_user)):
+    """ Пост для проверки JWT токена
+
+    Args:
+        user: DI юзера для jwt токена
+
+    Returns: Схема для отправленного юзера
+
+    """
     return user
 
 
 @auth_router.post("/refresh", summary="Refresh token", response_model=TokenSchema)
 async def refresh_jwt_token(refresh_token: str = Body(...)):
+    """ Пост для получения нового токена
+
+    Args:
+        refresh_token: refresh токен
+
+    Returns: Схема новых токенов
+
+    """
     try:
         payload = jwt.decode(
             refresh_token,
