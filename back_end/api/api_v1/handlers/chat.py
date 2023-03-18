@@ -13,11 +13,29 @@ chat_router = APIRouter()
 
 @chat_router.post("/create", summary="Create new chat", response_model=GenericChatScheme)
 async def create_chat(data: CreateChat, user=Depends(get_current_user)):
+    """Пость для создания 
+
+    Args:
+        data: Схема создания чата
+        user: DI юзера для jwt токена
+
+    Returns: Универсальная схема юзера
+
+    """
     return await ChatService.create_chat(data, user)
 
 
 @chat_router.post("/dm", summary="Create direct message", response_model=GenericChatScheme)
 async def create_dm(data: CreateDM, user=Depends(get_current_user)):
+    """
+
+    Args:
+        data: Схема создания чата
+        user: DI юзера для jwt токена
+
+    Returns: Универсальная схема юзера
+
+    """
     return await ChatService.create_dm(data, user)
 
 
