@@ -10,10 +10,6 @@ class SentMessage(BaseModel):
     chat_id: UUID = Field(alias="chatId")
 
 
-class MessageDelete(BaseModel):
-    msg_id: UUID = Field(alias="msgId")
-
-
 class MessageOut(BaseModel):
     msg_id: UUID = Field(alias="msgId")
     chat_id: UUID = Field(alias="chatId")
