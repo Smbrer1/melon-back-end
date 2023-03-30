@@ -3,17 +3,19 @@ from typing import Optional
 from uuid import UUID
 
 import pymongo.errors
+from beanie.odm.queries.find import FindMany
 
 from back_end.models.message_model import Message
 from back_end.models.user_model import User
 from back_end.schemas.generic_response_schema import GenericDelete
 from back_end.schemas.message_schema import SentMessage
+from back_end.services.chat_service import ChatService
 
 
 class MessageService:
     @staticmethod
     async def create_message(message: SentMessage, user: User) -> Optional[Message]:
-        """ Создать сообщение
+        """Создать сообщение
 
         Args:
             message: Схема сообщения
@@ -32,7 +34,7 @@ class MessageService:
 
     @staticmethod
     async def edit_message(msg_id: UUID, text: str, user: User) -> Optional[Message]:
-        """ Редактировать сообщение
+        """Редактировать сообщение
 
         Args:
             msg_id: UUID сообщения
@@ -56,7 +58,7 @@ class MessageService:
 
     @staticmethod
     async def delete_message(msg_id: UUID, user: User) -> Optional[GenericDelete]:
-        """ Удалить сообщение
+        """Удалить сообщение
 
         Args:
             msg_id: UUID сообщения
@@ -77,7 +79,7 @@ class MessageService:
 
     @staticmethod
     async def get_message_by_id(msg_id: UUID, user: User) -> Optional[Message]:
-        """ Получить сообщение по UUID
+        """Получить сообщение по UUID
 
         Args:
             msg_id: UUID сообщения
@@ -90,3 +92,10 @@ class MessageService:
             Message.msg_id == msg_id, Message.user_id == user.user_id
         )
         return msg
+
+    @staticmethod
+    async def get_message_by_chat_id(
+        chat_id: UUID, user: User
+    ) -> Optional[FindMany[Message]]:
+        chat = await ChatService.find_chat_by_chat_id(chat_id, user)
+        return Message.find_many(Message.chat_id == chat.chat_id)

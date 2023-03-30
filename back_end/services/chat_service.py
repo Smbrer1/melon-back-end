@@ -6,14 +6,19 @@ from beanie.odm.queries.find import FindMany
 
 from back_end.models.chat_model import Chat
 from back_end.models.user_model import User
-from back_end.schemas.chat_schema import CreateChat, CreateDM, ChatInvitation, GenericChatScheme
+from back_end.schemas.chat_schema import (
+    CreateChat,
+    CreateDM,
+    ChatInvitation,
+    GenericChatScheme,
+)
 from back_end.schemas.generic_response_schema import GenericDelete
 
 
 class ChatService:
     @staticmethod
     async def create_chat(chat: CreateChat, user: User) -> Optional[Chat]:
-        """ Создать чат в бд
+        """Создать чат в бд
 
         Args:
             chat: Схема создания чата
@@ -33,10 +38,10 @@ class ChatService:
 
     @staticmethod
     async def create_dm(dm: CreateDM, user: User) -> Optional[Chat]:
-        """ Создать ЛС в бд
+        """Создать ЛС в бд
 
         Args:
-            chat: Схема создания ЛС
+            dm: Схема создания ЛС
             user: Модель юзера
 
         Returns: Модель чата
@@ -48,13 +53,13 @@ class ChatService:
 
     @staticmethod
     async def delete_chat(chat_id: UUID, user: User) -> Optional[GenericDelete]:
-        """ Удалить чат из бд
+        """Удалить чат из бд
 
         Args:
             chat_id: UUID чата
             user: Модель юзера
 
-        Returns: Универсалья модель удаления
+        Returns: Универсальная модель удаления
 
         """
         delete_chat = await Chat.find_one(
@@ -68,14 +73,16 @@ class ChatService:
             return GenericDelete(item={"chatId": delete_chat}, success=False)
 
     @staticmethod
-    async def remove_from_chat(chat: GenericChatScheme, user: User) -> Optional[GenericDelete]:
-        """ Удалить юзеров из участников чата в бд
+    async def remove_from_chat(
+        chat: GenericChatScheme, user: User
+    ) -> Optional[GenericDelete]:
+        """Удалить юзеров из участников чата в бд
 
         Args:
             chat: Универсальная схема чата
             user: Модель юзера
 
-        Returns: Универсалья модель удаления
+        Returns: Универсальная модель удаления
 
         """
         remove_chat = await Chat.find_one(
@@ -91,13 +98,13 @@ class ChatService:
 
     @staticmethod
     async def remove_me_from_chat(chat_id: UUID, user: User) -> Optional[GenericDelete]:
-        """ Удаление текущего юзера из чата
+        """Удаление текущего юзера из чата
 
         Args:
             chat_id: UUID чата
             user: Модель юзера
 
-        Returns: Универсалья модель удаления
+        Returns: Универсальная модель удаления
 
         """
         remove_chat = await Chat.find_one(
@@ -120,7 +127,7 @@ class ChatService:
 
     @staticmethod
     async def get_chats_by_user_id(user: User) -> Optional[FindMany[Chat]]:
-        """ Получение всех чатов юзера
+        """Получение всех чатов юзера
 
         Args:
             user: Модель юзера
@@ -135,7 +142,7 @@ class ChatService:
 
     @staticmethod
     async def invite_to_chat(chat_inv: ChatInvitation, user: User) -> Optional[Chat]:
-        """ Приглашение юзеров в чат
+        """Приглашение юзеров в чат
 
         Args:
             chat_inv: Схема приглашения юзеров в чат
@@ -144,10 +151,18 @@ class ChatService:
         Returns: Модель чата
 
         """
-        chat = await Chat.find_one(Chat.chat_id == chat_inv.chat_id, user.user_id in Chat.participants)
+        chat = await Chat.find_one(
+            Chat.chat_id == chat_inv.chat_id, user.user_id in Chat.participants
+        )
         if not chat:
             raise pymongo.errors.OperationFailure("User is not in chats")
 
         chat.participants.union(chat_inv.participants)
         await chat.save()
         return chat
+
+    @staticmethod
+    async def find_chat_by_chat_id(chat_id: UUID, user: User) -> Optional[Chat]:
+        return await Chat.find_one(
+            Chat.chat_id == chat_id, user.user_id in Chat.participants
+        )
