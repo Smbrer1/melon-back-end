@@ -1,7 +1,7 @@
 from uuid import UUID
 
 import pymongo.errors
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, WebSocket
 
 from back_end.api.deps.user_deps import get_current_user
 from back_end.schemas.generic_response_schema import GenericDelete

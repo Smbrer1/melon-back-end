@@ -1,7 +1,7 @@
 from uuid import UUID
 
 import pymongo.errors
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, WebSocket
 
 from back_end.api.deps.user_deps import get_current_user
 from back_end.schemas.chat_schema import CreateChat, ChatInvitation, CreateDM, GenericChatScheme
@@ -113,3 +113,11 @@ async def remove_me_from_chat(chat_id: UUID, user=Depends(get_current_user)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Message does not exist"
         )
+
+
+@chat_router.websocket("/open/{chat_id}")
+async def open_websocket_chat(websocket: WebSocket, chat_id: UUID, user=Depends(get_current_user)):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        await websocket.send_text(f"Message text was {data}, and was sent by this user:{user.email}")
