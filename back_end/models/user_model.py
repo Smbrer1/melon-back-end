@@ -14,6 +14,7 @@ class User(Document):
     first_name: Optional[str] = Field(alias="firstName")
     last_name: Optional[str] = Field(alias="lastName")
     disabled: Optional[bool] = False
+    friend_list: Optional[set[UUID]]
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
