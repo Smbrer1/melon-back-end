@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 
 from back_end.api.deps.user_deps import get_current_user
 from back_end.schemas.generic_response_schema import GenericDelete
-from back_end.schemas.message_schema import SentMessage, MessageOut
+from back_end.schemas.message_schema import SentMessage, MessageOut, editMessage
 from back_end.services.message_service import MessageService
 
 message_router = APIRouter()
@@ -26,7 +26,7 @@ async def send_message(data: SentMessage, user=Depends(get_current_user)):
 
 
 @message_router.post("/edit", summary="Edit message", response_model=MessageOut)
-async def edit_message(message_id: UUID, text: str, user=Depends(get_current_user)):
+async def edit_message(data: editMessage, user=Depends(get_current_user)):
     """ Пост для редактирования сообщения
 
     Args:
@@ -38,7 +38,7 @@ async def edit_message(message_id: UUID, text: str, user=Depends(get_current_use
 
     """
     try:
-        return await MessageService.edit_message(message_id, text, user)
+        return await MessageService.edit_message(data.msg_id, data.text, user)
     except pymongo.errors.OperationFailure:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Message does not exist"

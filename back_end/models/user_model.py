@@ -27,8 +27,7 @@ class User(Document):
     disabled: Optional[bool] = False
 
     @validator('phone_number')
-    
-    def check_phone_number(self, phone) -> Optional[str]:
+    def check_phone_number(cls, phone) -> Optional[str]:
         if phone is None:
             return phone
 

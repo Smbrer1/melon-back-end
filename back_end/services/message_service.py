@@ -23,7 +23,7 @@ class MessageService:
 
         """
         msg_in = Message(
-            chat_id=message.chat_id,
+            chat_id=message.msg_id,
             user_id=user.user_id,
             text=message.text,
         )

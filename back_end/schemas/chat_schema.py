@@ -1,10 +1,11 @@
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel
 
 
 class GenericChatScheme(BaseModel):
-    chat_id: UUID
+    chat_id: Optional[UUID]
     participants: set[UUID]
 
 

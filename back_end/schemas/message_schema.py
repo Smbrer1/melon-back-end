@@ -7,7 +7,12 @@ from pydantic import BaseModel, Field
 
 class SentMessage(BaseModel):
     text: str
-    chat_id: UUID = Field(alias="chatId")
+    msg_id: UUID = Field(alias="chatId")
+
+
+class editMessage(BaseModel):
+    text: str
+    msg_id: UUID = Field(alias="chatId")
 
 
 class MessageOut(BaseModel):
@@ -23,4 +28,3 @@ class MessageOut(BaseModel):
 class DeletedMessage(BaseModel):
     msg_id: UUID = Field(alias="msgId")
     success: bool
-
