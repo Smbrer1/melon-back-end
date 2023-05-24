@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 
 
 class TokenSchema(BaseModel):
-    access_token: str = Field(alias="accessToken")
-    refresh_token: str = Field(alias="refreshToken")
+    access_token: str
+    refresh_token: str
 
 
 class TokenPayload(BaseModel):
