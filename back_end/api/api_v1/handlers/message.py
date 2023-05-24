@@ -30,8 +30,7 @@ async def edit_message(data: editMessage, user=Depends(get_current_user)):
     """ Пост для редактирования сообщения
 
     Args:
-        message_id: UUID сообщения
-        text: Текст сообщения
+        data: Схема отправленного сообщения
         user: DI юзера для jwt токена
 
     Returns: Схема отправленного сообщения
