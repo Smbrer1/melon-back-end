@@ -3,6 +3,7 @@ from typing import Optional
 from uuid import UUID
 
 import pymongo.errors
+from beanie import WriteRules
 from beanie.odm.queries.find import FindMany
 
 from back_end.models.chat_model import Chat
@@ -23,13 +24,14 @@ class ChatService:
         Returns: Модель чата
 
         """
+        users = [await User.find_one(User.user_id == x) for x in chat.participants]
         chat_in = Chat(
             name=chat.name,
-            participants=chat.participants,
+            participants=users,
             creator_id=user.user_id,
             is_dm=False,
         )
-        await chat_in.save()
+        await chat_in.save(link_rule=WriteRules.WRITE)
         return chat_in
 
     @staticmethod
@@ -101,8 +103,8 @@ class ChatService:
         Returns: Универсалья модель удаления
 
         """
-        remove_chat = await Chat.find_one(
-            Chat.chat_id == chat_id, Chat.participants.issuperset({user.user_id})
+        remove_chat = await Chat.find(
+            Chat.chat_id == chat_id, Chat.participants.user_id == user.user_id, fetch_links=True
         )
         if not remove_chat:
             raise pymongo.errors.OperationFailure("Chat not found")

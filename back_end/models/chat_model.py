@@ -1,15 +1,17 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Set, List
 from uuid import UUID, uuid4
 
-from beanie import Document
+from beanie import Document, Link
 from pydantic import Field
+
+from back_end.models.user_model import User
 
 
 class Chat(Document):
     chat_id: UUID = Field(default_factory=uuid4, alias="chatId")
     name: str
-    participants: set[UUID]
+    participants: List[Link[User]]
     creator_id: Optional[UUID] = Field(alias="creatorId")
     created_at: datetime = Field(default_factory=datetime.now, alias="createdAt")
     is_dm: bool = True
