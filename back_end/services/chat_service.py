@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 from uuid import UUID
 
@@ -32,17 +33,17 @@ class ChatService:
         return chat_in
 
     @staticmethod
-    async def create_dm(dm: CreateDM, user: User) -> Optional[Chat]:
+    async def create_dm(data: CreateDM, user: User) -> Optional[Chat]:
         """ Создать ЛС в бд
 
         Args:
-            chat: Схема создания ЛС
+            data: Схема создания ЛС
             user: Модель юзера
 
         Returns: Модель чата
 
         """
-        dm_in = Chat(name=dm.name, participants={dm.user_id, user.user_id})
+        dm_in = Chat(name=data.name, participants={data.user_id, user.user_id})
         await dm_in.save()
         return dm_in
 

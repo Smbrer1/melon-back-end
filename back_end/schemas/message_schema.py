@@ -12,7 +12,7 @@ class SentMessage(BaseModel):
 
 class editMessage(BaseModel):
     text: str
-    msg_id: UUID = Field(alias="chatId")
+    msg_id: UUID = Field(alias="msgId")
 
 
 class MessageOut(BaseModel):

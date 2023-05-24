@@ -8,6 +8,7 @@ from pydantic import Field
 
 class Chat(Document):
     chat_id: UUID = Field(default_factory=uuid4, alias="chatId")
+    name: str
     participants: set[UUID]
     creator_id: Optional[UUID] = Field(alias="creatorId")
     created_at: datetime = Field(default_factory=datetime.now, alias="createdAt")
