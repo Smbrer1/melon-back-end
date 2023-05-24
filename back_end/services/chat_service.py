@@ -102,7 +102,7 @@ class ChatService:
 
         """
         remove_chat = await Chat.find_one(
-            Chat.chat_id == chat_id, user.user_id in Chat.participants
+            Chat.chat_id == chat_id, Chat.participants.issuperset({user.user_id})
         )
         if not remove_chat:
             raise pymongo.errors.OperationFailure("Chat not found")
@@ -129,7 +129,7 @@ class ChatService:
         Returns: Список чатов
 
         """
-        chats = Chat.find_many(user.user_id in Chat.participants)
+        chats = Chat.find_many(Chat.participants.issuperset({user.user_id}))
         if not chats:
             raise pymongo.errors.OperationFailure("User is not in chats")
         return chats
