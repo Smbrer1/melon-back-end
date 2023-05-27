@@ -10,7 +10,7 @@ from back_end.services.user_service import UserService
 user_router = APIRouter()
 
 
-@user_router.post("/create", summary="Create new user", response_model=UserOut)
+@user_router.post("/create/", summary="Create new user", response_model=UserOut)
 async def create_user(data: UserAuth):
     """ Пост для создания юзера
 
@@ -20,6 +20,7 @@ async def create_user(data: UserAuth):
     Returns: Схема отправленного юзера
 
     """
+    print(data)
     try:
         return await UserService.create_user(data)
     except pymongo.errors.DuplicateKeyError:
@@ -30,7 +31,7 @@ async def create_user(data: UserAuth):
 
 
 @user_router.get(
-    "/me", summary="Get details of currently logged in user", response_model=UserOut
+    "/me/", summary="Get details of currently logged in user", response_model=UserOut
 )
 async def get_me(user: User = Depends(get_current_user)):
     """ Гет для получения текущего юзера
@@ -44,7 +45,7 @@ async def get_me(user: User = Depends(get_current_user)):
     return user
 
 
-@user_router.post("/update", summary="Update User", response_model=UserOut)
+@user_router.post("/update/", summary="Update User", response_model=UserOut)
 async def update_user(data: UserUpdate, user: User = Depends(get_current_user)):
     """ Пост для обновления юзера
 

@@ -11,7 +11,7 @@ from back_end.services.chat_service import ChatService
 chat_router = APIRouter()
 
 
-@chat_router.post("/create", summary="Create new chat", response_model=GenericChatScheme)
+@chat_router.post("/create/", summary="Create new chat", response_model=GenericChatScheme)
 async def create_chat(data: CreateChat, user=Depends(get_current_user)):
     """ Пост для создания чата
 
@@ -25,7 +25,7 @@ async def create_chat(data: CreateChat, user=Depends(get_current_user)):
     return await ChatService.create_chat(data, user)
 
 
-@chat_router.post("/dm", summary="Create direct message", response_model=GenericChatScheme)
+@chat_router.post("/dm/", summary="Create direct message", response_model=GenericChatScheme)
 async def create_dm(data: CreateDM, user=Depends(get_current_user)):
     """ Пост для создания личных сообщений
 
@@ -39,7 +39,7 @@ async def create_dm(data: CreateDM, user=Depends(get_current_user)):
     return await ChatService.create_dm(data, user)
 
 
-@chat_router.post("/invite", summary="Invite to chat", response_model=GenericChatScheme)
+@chat_router.post("/invite/", summary="Invite to chat", response_model=GenericChatScheme)
 async def invite_to_chat(chat_inv: ChatInvitation, user=Depends(get_current_user)):
     """ Пост для приглашения в чат
 
@@ -58,7 +58,7 @@ async def invite_to_chat(chat_inv: ChatInvitation, user=Depends(get_current_user
         )
 
 
-@chat_router.post("/delete", summary="Delete message", response_model=GenericDelete)
+@chat_router.post("/delete/", summary="Delete message", response_model=GenericDelete)
 async def delete_chat(chat_id: UUID, user=Depends(get_current_user)):
     """ Пост для удаления чата
 
@@ -77,7 +77,7 @@ async def delete_chat(chat_id: UUID, user=Depends(get_current_user)):
         )
 
 
-@chat_router.post("/remove", summary="Delete message", response_model=GenericDelete)
+@chat_router.post("/remove/", summary="Delete message", response_model=GenericDelete)
 async def remove_from_chat(chat: GenericChatScheme, user=Depends(get_current_user)):
     """ Пост для удаления из чата
 
@@ -96,7 +96,7 @@ async def remove_from_chat(chat: GenericChatScheme, user=Depends(get_current_use
         )
 
 
-@chat_router.post("/remove/me", summary="Delete message", response_model=GenericDelete)
+@chat_router.post("/remove/me/", summary="Delete message", response_model=GenericDelete)
 async def remove_me_from_chat(chat_id: UUID, user=Depends(get_current_user)):
     """ Пост для удаления текущего юзера из чата
 
@@ -115,7 +115,7 @@ async def remove_me_from_chat(chat_id: UUID, user=Depends(get_current_user)):
         )
 
 
-@chat_router.websocket("/open/{chat_id}")
+@chat_router.websocket("/open/{chat_id}/")
 async def open_websocket_chat(websocket: WebSocket, chat_id: UUID, user=Depends(get_current_user)):
     await websocket.accept()
     while True:
