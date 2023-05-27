@@ -16,3 +16,4 @@ python-decouple
 psycopg2
 beanie
 bcrypt
+phonenumbers
