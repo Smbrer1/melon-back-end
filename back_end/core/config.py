@@ -14,8 +14,8 @@ class Settings(BaseSettings):
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:3000",
-                                              "https://localhost:3000",
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://127.0.0.1:3000",
+                                              "https://127.0.0.1:3000",
                                               "https://melon-back-end-production.up.railway.app/"]
     PROJECT_NAME: str = "MELON-BACK-END"
 
