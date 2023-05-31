@@ -18,10 +18,11 @@ class Logs(Document):
         name = "chat_rooms"
 
 
-def log_request(req_body, res_body):
+async def log_request(req_body, res_body):
     log_in = Logs(
         log_value={"Request": decode(req_body),
                    "Response": decode(res_body)},
     )
     print(log_in.json())
     await log_in.save()
+    return log_in
