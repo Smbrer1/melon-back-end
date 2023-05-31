@@ -6,7 +6,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 class UserAuth(BaseModel):
     phone_number: str = Field(..., alias="phoneNumber", description="phone number")
-    username: str = Field(default="user123", min_length=5, max_length=50, description="user username")
+    username: str = Field(min_length=5, max_length=50, description="username")
     password: str = Field(
         ..., min_length=10, max_length=24, description="user password"
     )
