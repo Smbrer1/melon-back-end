@@ -56,7 +56,10 @@ async def test_token(user: User = Depends(get_current_user)):
     Returns: Схема для отправленного юзера
 
     """
-    return user
+    return {
+        "access_token": create_token(user),
+        "refresh_token": create_token(user),
+    }
 
 
 @auth_router.post("/refresh/", summary="Refresh token", response_model=TokenSchema)
