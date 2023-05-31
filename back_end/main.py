@@ -1,10 +1,12 @@
-from asyncio.log import logger
+import logging
+from encodings.utf_8 import decode
 
 from beanie import init_beanie
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from starlette.requests import Request
+from starlette.background import BackgroundTask
+from starlette.types import Message
 
 from back_end.api.api_v1.router import router
 from back_end.core.config import settings
@@ -26,14 +28,39 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+logging.basicConfig(
+    filename='info.log',
+    level=logging.DEBUG,
+    format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+)
 
-@app.middleware("http")
-async def log_stuff(request: Request, call_next):
-    logger.debug(f"{request.method} {request.url}")
+
+def log_info(req_body, res_body):
+    logging.info(f"Request: {decode(req_body)}")
+    logging.info(f"Response: {decode(res_body)}")
+
+
+async def set_body(request: Request, body: bytes):
+    async def receive() -> Message:
+        return {'type': 'http.request', 'body': body}
+
+    request._receive = receive
+
+
+@app.middleware('http')
+async def some_middleware(request: Request, call_next):
+    req_body = await request.body()
+    await set_body(request, req_body)
     response = await call_next(request)
-    logger.debug(response)
-    logger.debug(response.status_code)
-    return response
+
+    res_body = b''
+    async for chunk in response.body_iterator:
+        res_body += chunk
+
+    task = BackgroundTask(log_info, req_body, res_body)
+    return Response(content=res_body, status_code=response.status_code,
+                    headers=dict(response.headers), media_type=response.media_type, background=task)
 
 
 @app.on_event("startup")
