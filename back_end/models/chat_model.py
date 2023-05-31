@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Set, List
+from typing import Optional, List
 from uuid import UUID, uuid4
 
 from beanie import Document, Link

@@ -5,9 +5,7 @@ from beanie import Document, Indexed
 from phonenumbers import (
     PhoneNumberType,
 )
-from pydantic import Field, EmailStr, constr
-
-from back_end.services.user_service import user_name_factory
+from pydantic import Field, EmailStr
 
 MOBILE_NUMBER_TYPES = PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE
 
