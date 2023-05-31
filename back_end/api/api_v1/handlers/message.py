@@ -11,7 +11,7 @@ from back_end.services.message_service import MessageService
 message_router = APIRouter()
 
 
-@message_router.post("/send", summary="Send new message", response_model=MessageOut)
+@message_router.post("/send/", summary="Send new message", response_model=MessageOut)
 async def send_message(data: SentMessage, user=Depends(get_current_user)):
     """ Пост для отправления сообщений
 
@@ -25,7 +25,7 @@ async def send_message(data: SentMessage, user=Depends(get_current_user)):
     return await MessageService.create_message(data, user)
 
 
-@message_router.post("/edit", summary="Edit message", response_model=MessageOut)
+@message_router.post("/edit/", summary="Edit message", response_model=MessageOut)
 async def edit_message(data: editMessage, user=Depends(get_current_user)):
     """ Пост для редактирования сообщения
 
@@ -44,7 +44,7 @@ async def edit_message(data: editMessage, user=Depends(get_current_user)):
         )
 
 
-@message_router.post("/delete", summary="Delete message", response_model=GenericDelete)
+@message_router.post("/delete/", summary="Delete message", response_model=GenericDelete)
 async def delete_message(message_id: UUID, user=Depends(get_current_user)):
     """ Пост для удаления сообщений
 

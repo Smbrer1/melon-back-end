@@ -15,7 +15,7 @@ class Logs(Document):
         return f"< {self.id}>"
 
     class Settings:
-        name = "chat_rooms"
+        name = "logs"
 
 
 async def log_request(req_body, res_body):
