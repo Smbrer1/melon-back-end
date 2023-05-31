@@ -89,6 +89,6 @@ async def refresh_jwt_token(refresh_token: str = Body(...)):
             detail="Invalid token for user",
         )
     return {
-        "access_token": create_token(user.user_id),
-        "refresh_token": create_token(user.user_id),
+        "access_token": create_token(user),
+        "refresh_token": create_token(user),
     }
