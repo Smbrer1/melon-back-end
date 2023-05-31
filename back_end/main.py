@@ -9,7 +9,7 @@ from starlette.types import Message
 
 from back_end.api.api_v1.router import router
 from back_end.core.config import settings
-from back_end.core.logger import log_request
+from back_end.core.logger import log_request, Logs
 from back_end.models.chat_model import Chat
 from back_end.models.message_model import Message
 from back_end.models.user_model import User
@@ -68,7 +68,7 @@ async def app_init():
 
     await init_beanie(
         database=db_client,
-        document_models=[User, Message, Chat],
+        document_models=[User, Message, Chat, Logs],
     )
 
 
