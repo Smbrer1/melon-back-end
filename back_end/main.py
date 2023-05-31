@@ -1,7 +1,10 @@
+from asyncio.log import logger
+
 from beanie import init_beanie
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from starlette.requests import Request
 
 from back_end.api.api_v1.router import router
 from back_end.core.config import settings
@@ -24,6 +27,15 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def log_stuff(request: Request, call_next):
+    logger.debug(f"{request.method} {request.url}")
+    response = await call_next(request)
+    logger.debug(response)
+    logger.debug(response.status_code)
+    return response
+
+
 @app.on_event("startup")
 async def app_init():
     """
@@ -36,5 +48,6 @@ async def app_init():
         database=db_client,
         document_models=[User, Message, Chat],
     )
+
 
 app.include_router(router, prefix=settings.API_V1_STR)

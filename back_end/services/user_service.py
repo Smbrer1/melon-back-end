@@ -23,7 +23,7 @@ class UserService:
         """
         user_in = User(
             username=user.username,
-            email=user.email,
+            phone_number=user.phone_number,
             hashed_password=get_password(user.password),
         )
         await user_in.save()
@@ -34,7 +34,7 @@ class UserService:
         """ Аутентификация юзера
 
         Args:
-            email: Почта пользователя
+            phone_number: Почта пользователя
             password: Пароль пользователя
 
         Returns: Модель юзера

@@ -13,8 +13,8 @@ MOBILE_NUMBER_TYPES = PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBI
 class User(Document):
     user_id: UUID = Field(default_factory=uuid4, alias="userId")
     username: Indexed(str, unique=True)
-    phone_number: Indexed(constr(max_length=50, strip_whitespace=True)) = None
-    email: Indexed(EmailStr, unique=True)
+    phone_number: Indexed(constr(max_length=50, strip_whitespace=True)) = Field(alias="phoneNumber")
+    email: Optional[EmailStr]
     hashed_password: str = Field(alias="hashedPassword")
     first_name: Optional[str] = Field(alias="firstName")
     last_name: Optional[str] = Field(alias="lastName")

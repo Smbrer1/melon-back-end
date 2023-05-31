@@ -25,7 +25,7 @@ async def create_user(data: UserAuth):
     except pymongo.errors.DuplicateKeyError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User with this email or username already exist",
+            detail="User with this phone_number or username already exist",
         )
 
 

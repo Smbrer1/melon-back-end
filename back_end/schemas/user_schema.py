@@ -16,7 +16,7 @@ class UserOut(BaseModel):
     user_id: UUID = Field(alias="userId")
     username: str
     phone_number: str = Field(alias="phoneNumber")
-    email: EmailStr
+    email: Optional[EmailStr]
     first_name: Optional[str] = Field(alias="firstName")
     last_name: Optional[str] = Field(alias="lastName")
     disabled: Optional[bool] = False
