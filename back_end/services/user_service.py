@@ -40,7 +40,7 @@ class UserService:
         Returns: Модель юзера
 
         """
-        user = await UserService.get_user_by_email(phone=phone_number)
+        user = await UserService.get_user_by_phone_number(phone_number=phone_number)
         if not user:
             return None
         if not verify_password(password=password, hashed_pass=user.hashed_password):
