@@ -1,5 +1,4 @@
 import logging
-from encodings.utf_8 import decode
 
 from beanie import init_beanie
 from fastapi import FastAPI, Response, Request
@@ -10,6 +9,7 @@ from starlette.types import Message
 
 from back_end.api.api_v1.router import router
 from back_end.core.config import settings
+from back_end.core.logger import log_request
 from back_end.models.chat_model import Chat
 from back_end.models.message_model import Message
 from back_end.models.user_model import User
@@ -36,11 +36,6 @@ logging.basicConfig(
 )
 
 
-def log_info(req_body, res_body):
-    logging.info(f"Request: {decode(req_body)}")
-    logging.info(f"Response: {decode(res_body)}")
-
-
 async def set_body(request: Request, body: bytes):
     async def receive() -> Message:
         return {'type': 'http.request', 'body': body}
@@ -58,7 +53,7 @@ async def some_middleware(request: Request, call_next):
     async for chunk in response.body_iterator:
         res_body += chunk
 
-    task = BackgroundTask(log_info, req_body, res_body)
+    task = BackgroundTask(log_request, req_body, res_body)
     return Response(content=res_body, status_code=response.status_code,
                     headers=dict(response.headers), media_type=response.media_type, background=task)
 
