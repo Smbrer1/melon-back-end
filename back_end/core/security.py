@@ -27,7 +27,7 @@ def create_access_token(subject: Union[User, Any], expires_delta: int = None) ->
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
-    to_encode = {"exp": expires_delta, "user": subject.json()}
+    to_encode = {"exp": expires_delta, "user": subject.dict()}
     encoded_jwt = jwt.encode(to_encode, settings.JWT_SECRET_KEY, settings.ALGORITHM)
     return encoded_jwt
 
