@@ -8,7 +8,7 @@ from pydantic import Field
 
 class Logs(Document):
     log_id: UUID = Field(default_factory=uuid4)
-    timestamp: str = Field(default_factory=datetime.now)
+    timestamp: datetime = Field(default_factory=datetime.now)
     log_value: dict
 
     def __repr__(self) -> str:
@@ -18,9 +18,10 @@ class Logs(Document):
         name = "chat_rooms"
 
 
-async def log_request(req_body, res_body):
+def log_request(req_body, res_body):
     log_in = Logs(
         log_value={"Request": decode(req_body),
                    "Response": decode(res_body)},
     )
+    print(log_in.json())
     await log_in.save()
