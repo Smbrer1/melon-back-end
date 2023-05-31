@@ -7,7 +7,7 @@ from pydantic import ValidationError
 
 from back_end.api.deps.user_deps import get_current_user
 from back_end.core.config import settings
-from back_end.core.security import create_access_token, create_refresh_token
+from back_end.core.security import create_token
 from back_end.models.user_model import User
 from back_end.schemas.auth_schema import TokenPayload
 from back_end.schemas.auth_schema import TokenSchema
@@ -41,8 +41,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
         )
 
     return {
-        "access_token": create_access_token(user),
-        "refresh_token": create_refresh_token(user),
+        "access_token": create_token(user),
+        "refresh_token": create_token(user),
     }
 
 
@@ -91,6 +91,6 @@ async def refresh_jwt_token(refresh_token: str = Body(...)):
             detail="Invalid token for user",
         )
     return {
-        "access_token": create_access_token(user.user_id),
-        "refresh_token": create_refresh_token(user.user_id),
+        "access_token": create_token(user.user_id),
+        "refresh_token": create_token(user.user_id),
     }

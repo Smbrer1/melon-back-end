@@ -6,12 +6,11 @@ from passlib.context import CryptContext
 
 from back_end.core.config import settings
 from back_end.models.user_model import User
-from bson import json_util
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def create_access_token(subject: Union[User, Any], expires_delta: int = None) -> str:
+def create_token(subject: Union[User, Any], expires_delta: int = None) -> str:
     """ Функция создания access токена
 
     Args:
@@ -22,38 +21,22 @@ def create_access_token(subject: Union[User, Any], expires_delta: int = None) ->
 
     """
     if expires_delta is not None:
-        expires_delta = datetime.utcnow() + expires_delta # noqa
+        expires_delta = datetime.utcnow() + expires_delta  # noqa
     else:
         expires_delta = datetime.utcnow() + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
-    to_encode = {"exp": expires_delta, "user": json_util.dumps(subject)}
+    to_encode = {"exp": expires_delta, "user": {
+        "userId": str(subject.user_id),
+        "username": subject.username,
+        "phoneNumber": subject.phone_number,
+        "email": subject.email,
+        "firstName": subject.first_name,
+        "lastName": subject.last_name,
+        "disabled": subject.disabled
+    }}
     encoded_jwt = jwt.encode(to_encode, settings.JWT_SECRET_KEY, settings.ALGORITHM)
-    return encoded_jwt
-
-
-def create_refresh_token(subject: Union[User, Any], expires_delta: int = None) -> str:
-    """ Функция создания refresh токена
-
-    Args:
-        subject: Объект шифруемый в JWT токене (UUID юзера)
-        expires_delta: Дата окончания действия токена
-
-    Returns: строку токена
-
-    """
-    if expires_delta is not None:
-        expires_delta = datetime.utcnow() + expires_delta # noqa
-    else:
-        expires_delta = datetime.utcnow() + timedelta(
-            minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES
-        )
-
-    to_encode = {"exp": expires_delta, "user": json_util.dumps(subject)}
-    encoded_jwt = jwt.encode(
-        to_encode, settings.JWT_REFRESH_SECRET_KEY, settings.ALGORITHM
-    )
     return encoded_jwt
 
 

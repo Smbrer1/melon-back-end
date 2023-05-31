@@ -1,6 +1,5 @@
 from datetime import datetime
 from encodings.utf_8 import decode
-from uuid import uuid4, UUID
 
 from beanie import Document
 from pydantic import Field

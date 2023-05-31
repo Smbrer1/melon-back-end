@@ -5,7 +5,7 @@ from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from starlette.background import BackgroundTask
-from starlette.types import Message
+from starlette.types import Message as msg
 
 from back_end.api.api_v1.router import router
 from back_end.core.config import settings
@@ -37,7 +37,7 @@ logging.basicConfig(
 
 
 async def set_body(request: Request, body: bytes):
-    async def receive() -> Message:
+    async def receive() -> msg:
         return {'type': 'http.request', 'body': body}
 
     request._receive = receive
