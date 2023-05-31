@@ -5,7 +5,7 @@ from beanie import Document, Indexed
 from phonenumbers import (
     PhoneNumberType,
 )
-from pydantic import Field, EmailStr
+from pydantic import Field, EmailStr, constr
 
 MOBILE_NUMBER_TYPES = PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE
 
@@ -13,7 +13,7 @@ MOBILE_NUMBER_TYPES = PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBI
 class User(Document):
     user_id: UUID = Field(default_factory=uuid4, alias="userId")
     username: Indexed(str, unique=True)
-    phone_number: Indexed(str, max_length=50, strip_whitespace=True) = None
+    phone_number: Indexed(constr(max_length=50, strip_whitespace=True)) = None
     email: Indexed(EmailStr, unique=True)
     hashed_password: str = Field(alias="hashedPassword")
     first_name: Optional[str] = Field(alias="firstName")
