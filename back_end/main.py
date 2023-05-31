@@ -44,7 +44,7 @@ async def set_body(request: Request, body: bytes):
 
 
 @app.middleware('http')
-async def some_middleware(request: Request, call_next):
+async def log_middleware(request: Request, call_next):
     req_body = await request.body()
     await set_body(request, req_body)
     response = await call_next(request)

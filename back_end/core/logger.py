@@ -7,7 +7,6 @@ from pydantic import Field
 
 
 class Logs(Document):
-    log_id: UUID = Field(default_factory=uuid4)
     timestamp: datetime = Field(default_factory=datetime.now)
     log_value: dict
 
