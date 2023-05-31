@@ -2,6 +2,8 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from back_end.schemas.user_schema import UserOut
+
 
 class TokenSchema(BaseModel):
     access_token: str
@@ -9,5 +11,5 @@ class TokenSchema(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    sub: UUID = None
+    user: UserOut = None
     exp: int = None

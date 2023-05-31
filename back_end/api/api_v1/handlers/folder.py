@@ -1,3 +1,5 @@
+from uuid import UUID
+
 import pymongo.errors
 from fastapi import APIRouter, HTTPException, status
 from fastapi import Depends
@@ -19,9 +21,9 @@ async def create_folder(data: CreateAndUpdateFolder, user: User = Depends(get_cu
 
     Args:
         user: DI юзера для jwt токена
-        data: Схема аутентификации юзера
+        data: Схема создания папки
 
-    Returns: Схема отправленного юзера
+    Returns: Схема отправленной папки
 
     """
     try:
@@ -39,9 +41,9 @@ async def update_folder(data: CreateAndUpdateFolder, user: User = Depends(get_cu
 
     Args:
         user: DI юзера для jwt токена
-        data: Схема аутентификации юзера
+        data: Схема обновления папки
 
-    Returns: Схема отправленного юзера
+    Returns: Схема отправленной папки
 
     """
     try:
@@ -52,20 +54,21 @@ async def update_folder(data: CreateAndUpdateFolder, user: User = Depends(get_cu
             detail="Cannot create folder",
         )
 
-@folder_router.post("/update/", summary="Update User", response_model=UserOut)
-async def update_user(data: UserUpdate, user: User = Depends(get_current_user)):
+
+@folder_router.post("/delete/", summary="Delete Folder", response_model=UserOut)
+async def update_user(folder_id: UUID, user: User = Depends(get_current_user)):
     """ Пост для обновления юзера
 
     Args:
-        data: Схема обновления юзера
+        folder_id: UUID папки
         user: DI юзера для jwt токена
 
     Returns: Схема отправленного юзера
 
     """
     try:
-        return await UserService.update_user(user.user_id, data)
+        return await FolderService.delete_folder(folder_id, user.user_id)
     except pymongo.errors.OperationFailure:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="User does not exist"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Folder does not exists"
         )

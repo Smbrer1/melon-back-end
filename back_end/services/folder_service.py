@@ -49,3 +49,22 @@ class FolderService:
         folder.name = data.name
         await folder.save()
         return folder
+
+    @staticmethod
+    async def delete_folder(uuid: UUID, user_id: UUID) -> Folder:
+        """ Редактировать юзера
+
+        Args:
+            uuid: UUID юзера
+            data: Схема редактирования юзера
+
+        Returns: Модель юзера
+
+        """
+        folder = await Folder.find_one(Folder.owner == user_id, Folder.folder_id == uuid )
+        if not folder:
+            raise pymongo.errors.OperationFailure("User not found")
+        folder.chat_list = data.chat_list
+        folder.name = data.name
+        await folder.save()
+        return folder
