@@ -130,4 +130,7 @@ dmypy.json
 
 # Pycharm stuff
 .idea
-.key
+
+# keys
+/jwtRS256.key
+/jwtRS256.key.pub
