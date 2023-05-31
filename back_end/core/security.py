@@ -10,7 +10,7 @@ from back_end.models.user_model import User
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def create_token(subject: Union[User, Any], expires_delta: int = None) -> str:
+def create_token(subject: Union[User, Any], expires_delta: int = None, is_access=True) -> str:
     """ Функция создания access токена
 
     Args:
@@ -23,10 +23,14 @@ def create_token(subject: Union[User, Any], expires_delta: int = None) -> str:
     if expires_delta is not None:
         expires_delta = datetime.utcnow() + expires_delta  # noqa
     else:
-        expires_delta = datetime.utcnow() + timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-            # TODO сделать отдельную функцию с другим экспайром для рефреша
-        )
+        if is_access:
+            expires_delta = datetime.utcnow() + timedelta(
+                minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            )
+        else:
+            expires_delta = datetime.utcnow() + timedelta(
+                minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES
+            )
 
     to_encode = {"exp": expires_delta, "user": {
         "userId": str(subject.user_id),
