@@ -51,20 +51,22 @@ class FolderService:
         return folder
 
     @staticmethod
-    async def delete_folder(uuid: UUID, user_id: UUID) -> Folder:
+    async def delete_folder(folder_id: UUID, user: User) -> Folder:
         """ Редактировать юзера
 
         Args:
-            uuid: UUID юзера
-            data: Схема редактирования юзера
+            user_id: UUID юзера
+            folder_id: UUID папки
 
         Returns: Модель юзера
 
         """
-        folder = await Folder.find_one(Folder.owner == user_id, Folder.folder_id == uuid )
-        if not folder:
-            raise pymongo.errors.OperationFailure("User not found")
-        folder.chat_list = data.chat_list
-        folder.name = data.name
-        await folder.save()
-        return folder
+        delete_folder = await Folder.find_one(
+            Folder.folder_id == folder_id, Folder.owner == user
+        )
+        if not delete_folder:
+            raise pymongo.errors.OperationFailure("Not allowed or chat not found")
+        if await delete_folder.delete():
+            return GenericDelete(item={"chatId": delete_folder}, success=True)
+        else:
+            return GenericDelete(item={"chatId": delete_folder}, success=False)

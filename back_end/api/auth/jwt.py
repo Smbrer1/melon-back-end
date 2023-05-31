@@ -9,7 +9,7 @@ from back_end.api.deps.user_deps import get_current_user
 from back_end.core.config import settings
 from back_end.core.security import create_token
 from back_end.models.user_model import User
-from back_end.schemas.auth_schema import TokenPayload
+from back_end.schemas.auth_schema import TokenPayload, admin_oauth2_schema
 from back_end.schemas.auth_schema import TokenSchema
 from back_end.schemas.user_schema import UserOut
 from back_end.services.user_service import UserService
@@ -82,7 +82,7 @@ async def refresh_jwt_token(refresh_token: str = Body(...)):
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    user = await UserService.get_user_by_id(token_data.sub)
+    user = await UserService.get_user_by_id(token_data.user.user_id)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

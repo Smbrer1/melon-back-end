@@ -56,18 +56,18 @@ async def update_folder(data: CreateAndUpdateFolder, user: User = Depends(get_cu
 
 
 @folder_router.post("/delete/", summary="Delete Folder", response_model=UserOut)
-async def update_user(folder_id: UUID, user: User = Depends(get_current_user)):
-    """ Пост для обновления юзера
+async def delete_folder(folder_id: UUID, user: User = Depends(get_current_user)):
+    """ Пост для удаления папки
 
     Args:
         folder_id: UUID папки
         user: DI юзера для jwt токена
 
-    Returns: Схема отправленного юзера
+    Returns: Схема удаленной папки
 
     """
     try:
-        return await FolderService.delete_folder(folder_id, user.user_id)
+        return await FolderService.delete_folder(folder_id, user)
     except pymongo.errors.OperationFailure:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Folder does not exists"

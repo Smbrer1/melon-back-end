@@ -102,13 +102,13 @@ class ChatService:
         Returns: Универсалья модель удаления
 
         """
-        remove_chat = await Chat.find(
+        remove_chat = await Chat.find_one(
             Chat.chat_id == chat_id, Chat.participants.user_id == user.user_id, fetch_links=True
         )
         if not remove_chat:
             raise pymongo.errors.OperationFailure("Chat not found")
 
-        remove_chat.participants.remove(user.user_id)
+        remove_chat.participants.remove(user)
         if await remove_chat.save():
             return GenericDelete(
                 item={"chatId": remove_chat.chat_id, "userId": user.user_id},
