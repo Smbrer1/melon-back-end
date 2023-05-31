@@ -18,7 +18,7 @@ auth_router = APIRouter()
 
 
 @auth_router.post(
-    "/login",
+    "/login/",
     summary="Create access and refresh tokens for user",
     response_model=TokenSchema,
 )
@@ -47,7 +47,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
 
 
 @auth_router.post(
-    "/test-token", summary="Test if the access token is valid", response_model=UserOut
+    "/test-token/", summary="Test if the access token is valid", response_model=UserOut
 )
 async def test_token(user: User = Depends(get_current_user)):
     """ Пост для проверки JWT токена
@@ -61,7 +61,7 @@ async def test_token(user: User = Depends(get_current_user)):
     return user
 
 
-@auth_router.post("/refresh", summary="Refresh token", response_model=TokenSchema)
+@auth_router.post("/refresh/", summary="Refresh token", response_model=TokenSchema)
 async def refresh_jwt_token(refresh_token: str = Body(...)):
     """ Пост для получения нового токена
 
