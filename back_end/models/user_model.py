@@ -2,12 +2,7 @@ from typing import Optional
 from uuid import UUID, uuid4
 
 from beanie import Document, Indexed
-from phonenumbers import (
-    PhoneNumberType,
-)
 from pydantic import Field, EmailStr, constr
-
-MOBILE_NUMBER_TYPES = PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE
 
 
 class User(Document):
