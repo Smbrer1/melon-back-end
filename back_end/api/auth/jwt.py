@@ -46,7 +46,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
     }
 
 
-@auth_router.get("/test-token/", summary="Test if the access token is valid", response_model=UserOut)
+@auth_router.get("/test-token/", summary="Test if the access token is valid", response_model=dict)
 async def test_token(user: User = Depends(get_current_user)):
     """ Пост для проверки JWT токена
 

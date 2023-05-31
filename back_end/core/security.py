@@ -25,6 +25,7 @@ def create_token(subject: Union[User, Any], expires_delta: int = None) -> str:
     else:
         expires_delta = datetime.utcnow() + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            # TODO сделать отдельную функцию с другим экспайром для рефреша
         )
 
     to_encode = {"exp": expires_delta, "user": {
