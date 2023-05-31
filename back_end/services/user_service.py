@@ -30,7 +30,7 @@ class UserService:
         return user_in
 
     @staticmethod
-    async def authenticate(email: str, password: str) -> Optional[User]:
+    async def authenticate(phone_number: str, password: str) -> Optional[User]:
         """ Аутентификация юзера
 
         Args:
@@ -40,7 +40,7 @@ class UserService:
         Returns: Модель юзера
 
         """
-        user = await UserService.get_user_by_email(email=email)
+        user = await UserService.get_user_by_email(phone=phone_number)
         if not user:
             return None
         if not verify_password(password=password, hashed_pass=user.hashed_password):
@@ -49,16 +49,16 @@ class UserService:
         return user
 
     @staticmethod
-    async def get_user_by_email(email: str) -> Optional[User]:
-        """ Получить юзера по почте
+    async def get_user_by_phone_number(phone_number: str) -> Optional[User]:
+        """ Получить юзера по номеру телефона
 
         Args:
-            email: почта
+            phone_number: номер телефона
 
         Returns: Модель юзера
 
         """
-        user = await User.find_one(User.email == email)
+        user = await User.find_one(User.phone_number == phone_number)
         return user
 
     @staticmethod
@@ -88,7 +88,7 @@ class UserService:
         user = await User.find_one(User.user_id == uuid)
         if not user:
             raise pymongo.errors.OperationFailure("User not found")
-        user.email = data.email
+        user.phone_number = data.phone_number
         user.first_name = data.first_name
         user.last_name = data.last_name
         await user.save()

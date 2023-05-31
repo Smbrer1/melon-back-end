@@ -26,24 +26,6 @@ class User(Document):
     last_name: Optional[str] = Field(alias="lastName")
     disabled: Optional[bool] = False
 
-    @validator('phone_number')
-    def check_phone_number(cls, phone) -> Optional[str]:
-        if phone is None:
-            return phone
-
-        try:
-            parsed_phone = parse_phone_number(phone, 'RU')
-        except NumberParseException as e:
-            raise ValueError('Please provide a valid mobile phone number') from e
-
-        if not is_valid_number(parsed_phone) or number_type(parsed_phone) not in MOBILE_NUMBER_TYPES:
-            raise ValueError('Please provide a valid mobile phone number')
-
-        return format_number(
-            parsed_phone,
-            PhoneNumberFormat.NATIONAL if parsed_phone.country_code == 7 else PhoneNumberFormat.INTERNATIONAL
-        )
-
     def __repr__(self) -> str:
         return f"<User {self.email}>"
 
