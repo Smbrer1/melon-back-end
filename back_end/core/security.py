@@ -14,6 +14,7 @@ def create_token(subject: Union[User, Any], expires_delta: int = None, is_access
     """ Функция создания access токена
 
     Args:
+        is_access: Является ли текон access
         subject: Объект шифруемый в JWT токене (UUID юзера)
         expires_delta: Дата окончания действия токена
 
